@@ -5,6 +5,7 @@ using namespace std;
 struct Node {
     int data;
     Node *next;
+    Node *prev;
 };
 
 
@@ -12,8 +13,6 @@ struct Node {
 void deleteNode(Node** head, int data) {
     // Create a temporary node to traverse
     Node* temp = *head;
-    // Create a previous node to keep track of the previous node
-    Node* prev = nullptr;
 
     // If the head is the node to be deleted
     if(temp != nullptr && temp->data == data) {
@@ -24,7 +23,6 @@ void deleteNode(Node** head, int data) {
 
     // Traverse to the node to be deleted
     while(temp != nullptr && temp->data != data) {
-        prev = temp;
         temp = temp->next;
     }
 
@@ -34,7 +32,8 @@ void deleteNode(Node** head, int data) {
     }
 
     // Delete the node
-    prev->next = temp->next;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
     delete temp;
 }
 
@@ -49,8 +48,8 @@ void insert(Node** head, int data) {
     newNode->next = nullptr;
 
     // If the linked list is empty, set the new node as the head
-   if(*head == nullptr) {
-       *head = newNode;
+    if(*head == nullptr) {
+        *head = newNode;
     // If the linked list is not empty, traverse to the end and insert the new node
     } else {
         // Create a temporary node to traverse
@@ -61,8 +60,8 @@ void insert(Node** head, int data) {
         }
         // Insert the new node
         temp->next = newNode;
+        newNode->prev = temp;
     }
-    
 }
 
 
